@@ -40,42 +40,38 @@
         /* NAV & SEARCH */
         nav { height: var(--header-h); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; background: #000; z-index: 100; }
         .logo-area { font-weight: 800; font-size: 14px; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
-        
         .search-container { flex-grow: 1; display: flex; justify-content: center; padding: 0 40px; }
         .search-bar {
-            width: 100%; max-width: 550px; background: #111;
-            border: 1px solid #333; border-radius: 8px;
-            padding: 10px 18px; color: var(--accent); font-size: 13px; outline: none;
-            transition: 0.3s;
+            width: 100%; max-width: 550px; background: #111; border: 1px solid #333; border-radius: 8px;
+            padding: 10px 18px; color: var(--accent); font-size: 13px; outline: none; transition: 0.3s;
             box-shadow: 0 0 10px rgba(0, 255, 65, 0.1);
         }
         .search-bar:focus { border-color: var(--accent); background: #161616; box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); }
 
-        /* INTENSE NEON BLINKING DOT */
+        /* NEON BLINKING DOT */
         .user-status { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: bold; color: var(--accent); text-transform: uppercase; }
         .blink-dot {
-            width: 8px; height: 8px; 
-            background: var(--accent);
-            border-radius: 50%; 
-            /* Multi-layer shadow for neon glow effect */
+            width: 8px; height: 8px; background: var(--accent); border-radius: 50%; 
             box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 15px var(--accent);
-            filter: drop-shadow(0 0 2px var(--accent));
-            animation: pulse 1.5s infinite;
+            filter: drop-shadow(0 0 2px var(--accent)); animation: pulse 1.5s infinite;
         }
-        @keyframes pulse { 
-            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 5px var(--accent), 0 0 15px var(--accent); } 
-            50% { opacity: 0.4; transform: scale(0.9); box-shadow: 0 0 2px var(--accent), 0 0 5px var(--accent); } 
-        }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.9); } }
 
         /* MAIN WRAPPER */
         .main-wrapper { display: flex; flex-grow: 1; height: calc(100vh - var(--header-h)); }
-        aside { width: 260px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px 0; }
+        aside { width: 260px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px 0; z-index: 50; }
         .compose-btn { background: #fff; color: #000; padding: 14px; margin: 0 25px 30px; border-radius: 30px; text-align: center; font-weight: 800; border: none; cursor: pointer; }
-        .nav-link { padding: 14px 30px; font-size: 13px; color: #999; cursor: pointer; border-left: 4px solid transparent; }
+        .nav-link { padding: 14px 30px; font-size: 13px; color: #999; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
         .nav-link.active { background: #151515; color: #fff; border-left: 4px solid var(--accent); }
 
-        /* THE DYNAMIC CONTAINER VIEWPORT */
-        .viewport { flex-grow: 1; position: relative; background: #000; overflow: hidden; }
+        /* THE DUAL-WINDOW VIEWPORT */
+        .viewport-container { flex-grow: 1; position: relative; background: #000; overflow: hidden; }
+        .window { 
+            position: absolute; inset: 0; width: 100%; height: 100%; 
+            display: none; /* Hidden by default */
+        }
+        .window.active { display: block; } /* Show when triggered */
+
         iframe {
             width: 145%; height: 100%; border: none;
             position: absolute; left: 0; top: 0; margin-right: -45%;
@@ -119,11 +115,18 @@
     <div class="main-wrapper">
         <aside>
             <button class="compose-btn" onclick="openModal()">+ Submit Case</button>
-            <div class="nav-link active" onclick="switchView('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📥 Latest Leaks</div>
-            <div class="nav-link" onclick="switchView('1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO', this)">📁 Inbox</div>
+            <div class="nav-link active" onclick="openWindow('leaks-window', this)">📥 Latest Leaks</div>
+            <div class="nav-link" onclick="openWindow('inbox-window', this)">📁 Inbox</div>
         </aside>
-        <main class="viewport">
-            <iframe id="contentFrame" src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
+
+        <main class="viewport-container">
+            <div id="leaks-window" class="window active">
+                <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
+            </div>
+
+            <div id="inbox-window" class="window">
+                <iframe src="https://drive.google.com/embeddedfolderview?id=1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO#list"></iframe>
+            </div>
         </main>
     </div>
 
@@ -132,9 +135,14 @@
             setTimeout(() => { document.getElementById('boot-screen').remove(); }, 1500);
         });
 
-        function switchView(id, el) {
-            // Re-renders only the container within the viewport
-            document.getElementById('contentFrame').src = `https://drive.google.com/embeddedfolderview?id=${id}#list`;
+        // THE "NEW WINDOW" LOGIC
+        function openWindow(windowId, el) {
+            // Hide all windows
+            document.querySelectorAll('.window').forEach(win => win.classList.remove('active'));
+            // Show the clicked window
+            document.getElementById(windowId).classList.add('active');
+            
+            // Update sidebar UI
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             el.classList.add('active');
         }
