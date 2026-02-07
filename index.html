@@ -23,7 +23,7 @@
         .search-bar { width: 100%; max-width: 500px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 18px; color: var(--accent); outline: none; box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); }
         .menu-icon { font-size: 24px; color: var(--accent); cursor: pointer; display: none; margin-left: 15px; }
 
-        /* HIGH-INTENSITY NEON DOT */
+        /* NEON AUTHENTICATION DOT */
         .user-status { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: bold; color: var(--accent); flex-shrink: 0; }
         .blink-dot { 
             width: 8px; height: 8px; background: var(--accent); border-radius: 50%; 
@@ -40,20 +40,18 @@
             display: flex; flex-direction: column; padding: 25px 0; transition: transform 0.3s ease; z-index: 200;
         }
         .nav-link { padding: 14px 30px; font-size: 13px; color: #999; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
+        .nav-link:hover { color: #fff; background: #111; }
         .nav-link.active { background: #151515; color: #fff; border-left: 4px solid var(--accent); }
 
-        /* VIEWPORT & SHIELD LOGIC */
+        /* VIEWPORT: CLEAN & CENTERED */
         .viewport { flex-grow: 1; position: relative; overflow: hidden; background: #000; }
         .window { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
-        .window.active { display: flex; }
+        .window.active { display: block; }
         
-        /* ADJUSTED SHIELD: Slightly thinner to reveal orange headers */
-        .shield { position: absolute; top: 0; left: 0; width: 100%; height: 34px; background: #000; z-index: 10; }
-        
+        /* CLEAN IFRAME (NO CLIPPING) */
         iframe { 
-            width: 145%; height: 100%; border: none; position: absolute; 
-            left: 0; top: -10px; /* Pulls frame up to reveal TITLE and LAST MODIFIED */
-            margin-right: -45%; 
+            width: 100%; height: 100%; border: none; position: absolute; 
+            left: 0; top: 0; 
             filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1); 
         }
 
@@ -70,7 +68,6 @@
             .user-status span { display: none; }
             aside { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: 280px; transform: translateX(100%); border-left: 1px solid var(--border); }
             aside.open { transform: translateX(0); }
-            iframe { width: 170%; margin-right: -70%; }
         }
     </style>
 </head>
@@ -98,12 +95,10 @@
 
         <main class="viewport">
             <div id="leaks-window" class="window active">
-                <div class="shield"></div>
                 <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
             </div>
 
             <div id="harrasment-window" class="window">
-                <div class="shield"></div>
                 <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
             </div>
 
