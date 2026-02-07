@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>DPS EPSTEIN FILES | SECURE ARCHIVE</title>
+    <style>
+        :root {
+            --bg: #000;
+            --sidebar: #0d0d0d;
+            --border: #222;
+            --accent: #00ff41;
+            --text-main: #eee;
+            --text-dim: #888;
+            --header-h: 60px;
+        }
+
+        /* RESET & FULL-SCREEN OVERRIDE */
+        * { box-sizing: border-box; }
+        body, html {
+            margin: 0 !important; padding: 0 !important;
+            height: 100vh; width: 100vw;
+            background: var(--bg); color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow: hidden; display: flex; flex-direction: column;
+        }
+
+        /* TERMINAL BOOT SEQUENCE */
+        #boot-screen {
+            position: fixed; inset: 0; background: #000;
+            z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            font-family: 'Courier New', monospace; color: var(--accent);
+        }
+        .boot-loader {
+            width: 200px; height: 2px; background: #111;
+            margin-top: 15px; position: relative; overflow: hidden;
+        }
+        .boot-loader::after {
+            content: ''; position: absolute; left: -100%; width: 100%;
+            height: 100%; background: var(--accent);
+            animation: loading 1.2s infinite;
+        }
+        @keyframes loading { 100% { left: 100%; } }
+
+        /* TOP NAVIGATION */
+        nav {
+            height: var(--header-h); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; padding: 0 20px;
+            background: rgba(0,0,0,0.98); z-index: 100; flex-shrink: 0;
+        }
+
+        .logo-area { font-weight: 800; font-size: 14px; letter-spacing: 2px; color: #fff; text-transform: uppercase; flex-shrink: 0; }
+        
+        .search-container { flex-grow: 1; display: flex; justify-content: center; padding: 0 40px; }
+        .search-bar {
+            width: 100%; max-width: 550px; background: #111;
+            border: 1px solid var(--border); border-radius: 8px;
+            padding: 10px 18px; color: var(--accent); font-size: 13px;
+            outline: none; transition: 0.3s;
+        }
+        .search-bar:focus { border-color: var(--accent); background: #161616; box-shadow: 0 0 15px rgba(0,255,65,0.1); }
+
+        .user-status {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 10px; font-weight: bold; color: var(--accent);
+            text-transform: uppercase; flex-shrink: 0;
+        }
+        .blink-dot {
+            width: 8px; height: 8px; background: var(--accent);
+            border-radius: 50%; box-shadow: 0 0 8px var(--accent);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* MAIN BODY */
+        .main-wrapper { display: flex; flex-grow: 1; height: calc(100vh - var(--header-h)); width: 100%; }
+
+        /* SIDEBAR / MOBILE NAV */
+        aside {
+            width: 260px; background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; padding: 25px 0; flex-shrink: 0;
+        }
+
+        .compose-btn {
+            background: #fff; color: #000; padding: 14px;
+            margin: 0 25px 30px; border-radius: 30px;
+            text-align: center; font-weight: 800; font-size: 12px;
+            cursor: pointer; border: none; text-transform: uppercase;
+        }
+
+        .nav-link {
+            padding: 14px 30px; font-size: 13px; color: #999;
+            cursor: pointer; border-left: 4px solid transparent;
+            display: flex; align-items: center; gap: 12px; transition: 0.2s;
+        }
+        .nav-link:hover { background: #151515; color: #fff; }
+        .nav-link.active { background: #151515; color: #fff; border-left: 4px solid var(--accent); }
+
+        /* IFRAME VIEWPORT */
+        .viewport { flex-grow: 1; height: 100%; background: #000; }
+        iframe {
+            width: 100%; height: 100%; border: none;
+            /* J-Mail Professional Filter */
+            filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1);
+        }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 850px) {
+            .main-wrapper { flex-direction: column; }
+            aside {
+                width: 100%; height: auto; flex-direction: row;
+                padding: 0; border-right: none; border-bottom: 1px solid var(--border);
+                overflow-x: auto;
+            }
+            .compose-btn { display: none; }
+            .nav-link { padding: 18px 20px; border-left: none; border-bottom: 3px solid transparent; font-size: 11px; }
+            .nav-link.active { border-bottom: 3px solid var(--accent); }
+            .logo-area { display: none; }
+            .search-container { padding: 0 10px; }
+        }
+
+        /* SUBMISSION MODAL */
+        .modal {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.9); z-index: 10000;
+            align-items: center; justify-content: center;
+        }
+        .modal-card {
+            background: #0a0a0a; border: 1px solid var(--border);
+            padding: 40px; border-radius: 15px; text-align: center;
+            width: 90%; max-width: 340px;
+        }
+        .modal-btn {
+            display: block; padding: 15px; margin: 12px 0;
+            text-decoration: none; color: #000; background: var(--accent);
+            border-radius: 8px; font-weight: bold; font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="boot-screen">
+        <div style="letter-spacing: 3px;">CONNECTING TO ARCHIVE...</div>
+        <div class="boot-loader"></div>
+    </div>
+
+    <div id="subModal" class="modal" onclick="closeModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h2 style="color:#fff; font-size:18px; margin-bottom:20px; letter-spacing:1px;">SUBMIT EVIDENCE</h2>
+            <a href="mailto:failedartistgerman@gmail.com" class="modal-btn">ENCRYPTED EMAIL</a>
+            <a href="https://www.instagram.com/dpskeconfessions_/" target="_blank" class="modal-btn">INSTAGRAM DIRECT</a>
+            <button onclick="closeModal()" style="background:transparent; border:none; color:#555; cursor:pointer; margin-top:15px; font-family:monospace;">[ ABORT_CONNECTION ]</button>
+        </div>
+    </div>
+
+    <nav>
+        <div class="logo-area">DPS EPSTEIN FILES</div>
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search decrypted records..." id="archiveSearch">
+        </div>
+        <div class="user-status">
+            <div class="blink-dot"></div>
+            <span>STUDENT_ACCESS: ACTIVE</span>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <aside>
+            <button class="compose-btn" onclick="openModal()">+ Submit Case</button>
+            <div class="nav-link active" onclick="switchView('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📥 Latest Leaks</div>
+            <div class="nav-link" onclick="switchView('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📁 Cyber Harassment</div>
+            <div class="nav-link" onclick="switchView('1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO', this)">📁 Main Directory</div>
+        </aside>
+
+        <main class="viewport">
+            <iframe id="contentFrame" src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
+        </main>
+    </div>
+
+    <script>
+        // HANDLE BOOT SCREEN
+        window.addEventListener('load', () => {
+            const boot = document.getElementById('boot-screen');
+            setTimeout(() => {
+                boot.style.transition = 'opacity 0.6s ease';
+                boot.style.opacity = '0';
+                setTimeout(() => boot.remove(), 600);
+            }, 1500);
+        });
+
+        function switchView(id, el) {
+            document.getElementById('contentFrame').src = `https://drive.google.com/embeddedfolderview?id=${id}#list`;
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function openModal() { document.getElementById('subModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('subModal').style.display = 'none'; }
+
+        // SEARCH TRIGGER
+        document.getElementById('archiveSearch').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') alert('Local Database Filter: Use browser search (Ctrl+F) for rapid sorting.');
+        });
+    </script>
+
+</body>
+</html>
