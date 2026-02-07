@@ -4,88 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>DPS EPSTEIN FILES | SECURE ARCHIVE</title>
     <style>
-        :root {
-            --bg: #000;
-            --sidebar: #0d0d0d;
-            --border: #222;
-            --accent: #00ff41;
-            --text-main: #eee;
-            --header-h: 60px;
-        }
-
-        /* RESET & FULL-SCREEN OVERRIDE */
+        :root { --bg: #000; --sidebar: #0d0d0d; --border: #222; --accent: #00ff41; --text-main: #eee; --header-h: 60px; }
         * { box-sizing: border-box; }
-        body, html {
-            margin: 0; padding: 0;
-            height: 100vh; width: 100vw;
-            background: var(--bg); color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            overflow: hidden; display: flex; flex-direction: column;
-        }
+        body, html { margin: 0; padding: 0; height: 100vh; width: 100vw; background: var(--bg); color: var(--text-main); font-family: sans-serif; overflow: hidden; display: flex; flex-direction: column; }
 
-        /* TERMINAL BOOT SEQUENCE */
-        #boot-screen {
-            position: fixed; inset: 0; background: #000;
-            z-index: 9999; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            font-family: 'Courier New', monospace; color: var(--accent);
-        }
+        /* BOOT SCREEN */
+        #boot-screen { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: monospace; color: var(--accent); }
         .boot-loader { width: 200px; height: 2px; background: #111; margin-top: 15px; position: relative; overflow: hidden; }
         .boot-loader::after { content: ''; position: absolute; left: -100%; width: 100%; height: 100%; background: var(--accent); animation: loading 1.2s infinite; }
         @keyframes loading { 100% { left: 100%; } }
 
-        /* NAV & OUTSTANDING SEARCH BAR */
+        /* HEADER & SEARCH */
         nav { height: var(--header-h); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; background: #000; z-index: 100; }
-        .logo-area { font-weight: 800; font-size: 14px; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
+        .logo-area { font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
         .search-container { flex-grow: 1; display: flex; justify-content: center; padding: 0 40px; }
-        .search-bar {
-            width: 100%; max-width: 550px; background: #111; border: 1px solid #333; border-radius: 8px;
-            padding: 10px 18px; color: var(--accent); font-size: 13px; outline: none; transition: 0.3s;
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.1);
-        }
-        .search-bar:focus { border-color: var(--accent); background: #161616; box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); }
+        .search-bar { width: 100%; max-width: 550px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 18px; color: var(--accent); outline: none; box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); }
 
-        /* NEON GLOWING DOT */
-        .user-status { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: bold; color: var(--accent); text-transform: uppercase; }
-        .blink-dot {
-            width: 8px; height: 8px; background: var(--accent); border-radius: 50%; 
-            box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 15px var(--accent);
-            filter: drop-shadow(0 0 2px var(--accent)); animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.9); } }
+        /* NEON STATUS */
+        .user-status { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: bold; color: var(--accent); }
+        .blink-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 15px var(--accent); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        /* MAIN WRAPPER */
+        /* MAIN LAYOUT */
         .main-wrapper { display: flex; flex-grow: 1; height: calc(100vh - var(--header-h)); }
-        aside { width: 260px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px 0; z-index: 50; }
-        .compose-btn { background: #fff; color: #000; padding: 14px; margin: 0 25px 30px; border-radius: 30px; text-align: center; font-weight: 800; border: none; cursor: pointer; }
+        aside { width: 260px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px 0; }
         .nav-link { padding: 14px 30px; font-size: 13px; color: #999; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
         .nav-link.active { background: #151515; color: #fff; border-left: 4px solid var(--accent); }
 
-        /* DUAL WINDOW VIEWPORT */
-        .viewport-container { flex-grow: 1; position: relative; background: #000; overflow: hidden; }
-        .window { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
-        .window.active { display: block; }
-
-        /* BIG FOLDER SCALING */
-        #inbox-window iframe {
-            transform: scale(1.15); transform-origin: top left;
-            width: 126% !important; height: 110% !important;
-        }
-
-        iframe {
-            width: 145%; height: 100%; border: none;
-            position: absolute; left: 0; top: 0; margin-right: -45%;
-            filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1);
-        }
+        /* VIEWPORT & SHIELD */
+        .viewport { flex-grow: 1; position: relative; overflow: hidden; }
+        .shield { position: absolute; top: 0; left: 0; width: 100%; height: 45px; background: #000; z-index: 10; }
+        iframe { width: 145%; height: 100%; border: none; position: absolute; left: 0; top: 0; margin-right: -45%; filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1); }
 
         /* MODAL */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; }
         .modal-card { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 15px; text-align: center; width: 340px; }
         .modal-btn { display: block; padding: 15px; margin: 12px 0; text-decoration: none; color: #000; background: var(--accent); border-radius: 8px; font-weight: bold; }
-        .close-modal-btn { background:transparent; border:none; color:#555; cursor:pointer; margin-top:15px; font-family:monospace; text-transform:uppercase; font-size: 11px; }
     </style>
 </head>
 <body>
@@ -97,50 +53,42 @@
 
     <div id="subModal" class="modal" onclick="closeModal()">
         <div class="modal-card" onclick="event.stopPropagation()">
-            <h2 style="color:#fff; font-size:18px; margin-bottom:20px;">SUBMIT EVIDENCE</h2>
-            <a href="mailto:failedartistgerman@gmail.com?subject=EVIDENCE_SUBMISSION" class="modal-btn">ENCRYPTED EMAIL</a>
+            <h2 style="color:#fff; font-size:18px;">SUBMIT EVIDENCE</h2>
+            <a href="mailto:failedartistgerman@gmail.com" class="modal-btn">ENCRYPTED EMAIL</a>
             <a href="https://www.instagram.com/dpskeconfessions_/" target="_blank" class="modal-btn">INSTAGRAM DIRECT</a>
-            <button onclick="closeModal()" class="close-modal-btn">[ RETURN ]</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#555; cursor:pointer; margin-top:15px;">[ RETURN ]</button>
         </div>
     </div>
 
     <nav>
         <div class="logo-area">DPS EPSTEIN FILES</div>
-        <div class="search-container">
-            <input type="text" class="search-bar" id="archiveSearch" placeholder="Search decrypted records...">
-        </div>
-        <div class="user-status">
-            <div class="blink-dot"></div>
-            <span>STUDENT_ACCESS: ACTIVE</span>
-        </div>
+        <div class="search-container"><input type="text" class="search-bar" placeholder="Search decrypted records..."></div>
+        <div class="user-status"><div class="blink-dot"></div><span>STUDENT_ACCESS: ACTIVE</span></div>
     </nav>
 
     <div class="main-wrapper">
-        <aside>
-            <button class="compose-btn" onclick="openModal()">+ Submit Case</button>
-            <div class="nav-link active" onclick="openWindow('leaks-window', this)">📥 Latest Leaks</div>
-            <div class="nav-link" onclick="openWindow('inbox-window', this)">📁 Inbox</div>
+        <aside id="sidebar-links">
+            <button onclick="openModal()" style="background:#fff; color:#000; padding:14px; margin:0 25px 30px; border-radius:30px; border:none; font-weight:800; cursor:pointer;">+ Submit Case</button>
+            
+            <div class="nav-link active" onclick="switchDynamicView('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📥 Latest Leaks</div>
+            <div class="nav-link" onclick="switchDynamicView('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📁 Cyber Harassment</div>
+            <div class="nav-link" onclick="switchDynamicView('1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO', this)">📁 Inbox</div>
         </aside>
 
-        <main class="viewport-container">
-            <div id="leaks-window" class="window active">
-                <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
-            </div>
-
-            <div id="inbox-window" class="window">
-                <iframe src="https://drive.google.com/embeddedfolderview?id=1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO#list"></iframe>
-            </div>
+        <main class="viewport">
+            <div class="shield"></div> <iframe id="masterFrame" src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
         </main>
     </div>
 
     <script>
-        window.addEventListener('load', () => {
-            setTimeout(() => { document.getElementById('boot-screen').remove(); }, 1500);
-        });
+        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('boot-screen').remove(); }, 1500); });
 
-        function openWindow(windowId, el) {
-            document.querySelectorAll('.window').forEach(win => win.classList.remove('active'));
-            document.getElementById(windowId).classList.add('active');
+        // THE DYNAMIC ENGINE
+        function switchDynamicView(folderId, el) {
+            // Points the iframe directly to the PDF list of that folder
+            document.getElementById('masterFrame').src = `https://drive.google.com/embeddedfolderview?id=${folderId}#list`;
+            
+            // UI Switch
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             el.classList.add('active');
         }
