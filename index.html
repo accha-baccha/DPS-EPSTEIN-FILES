@@ -139,6 +139,22 @@
             text-decoration: none; color: #000; background: var(--accent);
             border-radius: 8px; font-weight: bold; font-size: 14px;
         }
+        /* Update your existing .viewport and iframe sections with this */
+.viewport { 
+    flex-grow: 1; 
+    height: 100%; 
+    background: #000; 
+    overflow: hidden; /* This acts as the 'scissors' to cut the name out */
+    position: relative; 
+}
+
+iframe {
+    width: 130%; /* Make the iframe wider than the screen */
+    height: 100%;
+    border: none;
+    margin-right: -30%; /* Pull the name column off the edge of the screen */
+    filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1);
+}
     </style>
 </head>
 <body>
@@ -208,4 +224,5 @@
     </script>
 
 </body>
+
 </html>
