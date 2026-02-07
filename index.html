@@ -105,34 +105,26 @@
             flex-grow: 1; 
             height: 100%; 
             background: #000; 
-            overflow: hidden; /* Acts as the 'scissors' to cut the name column */
+            overflow: hidden; /* Clips the name column off-screen */
             position: relative; 
         }
 
         iframe {
-            /* We extend the width so the 'Owner' and 'Last Modified' columns 
-               are pushed off the right edge of the screen */
-            width: 140%; 
+            width: 140%; /* Pushes the right-side metadata out of view */
             height: 100%;
             border: none;
             position: absolute;
             top: 0;
             left: 0;
-            /* Pulls the view back to keep file names on the left */
             margin-right: -40%; 
-            
-            /* J-Mail Professional Filter */
             filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1);
-            
-            /* Ensures smooth scrolling on mobile */
             -webkit-overflow-scrolling: touch;
         }
 
-        /* --- UI POLISH (OPTIONAL REFINEMENT) --- */
+        /* --- UI POLISH --- */
         .search-bar::placeholder { color: #333; }
         .nav-link:active { transform: scale(0.98); } 
 
-        /* MOBILE OPTIMIZATION OVERRIDES */
         @media (max-width: 850px) {
             .main-wrapper { flex-direction: column; }
             aside {
@@ -145,7 +137,7 @@
             .nav-link.active { border-bottom: 3px solid var(--accent); }
             .logo-area { display: none; }
             .search-container { padding: 0 10px; }
-            iframe { width: 170%; margin-right: -70%; } /* Aggressive clip for mobile screens */
+            iframe { width: 170%; margin-right: -70%; }
         }
 
         /* SUBMISSION MODAL */
@@ -217,22 +209,46 @@
             }, 1500);
         });
 
+        // SMART SEARCH LOGIC
+        const searchDB = {
+            "9th": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
+            "latest": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
+            "pratham": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
+            "cyber": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
+            "harassment": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
+            "main": "1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO",
+            "directory": "1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO"
+        };
+
+        const searchBar = document.getElementById('archiveSearch');
+        searchBar.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchBar.value.toLowerCase().trim();
+                if (searchDB[query]) {
+                    switchView(searchDB[query], document.querySelector(`.nav-link[onclick*="${searchDB[query]}"]`));
+                    searchBar.value = "ACCESS GRANTED: " + query.toUpperCase();
+                    setTimeout(() => { searchBar.value = ""; }, 2000);
+                } else {
+                    searchBar.style.borderColor = "red";
+                    searchBar.value = "ERROR: FILE NOT FOUND";
+                    setTimeout(() => { 
+                        searchBar.style.borderColor = "var(--border)"; 
+                        searchBar.value = "";
+                    }, 1500);
+                }
+            }
+        });
+
         // VIEW SWITCHER
         function switchView(id, el) {
             document.getElementById('contentFrame').src = `https://drive.google.com/embeddedfolderview?id=${id}#list`;
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            el.classList.add('active');
+            if(el) el.classList.add('active');
         }
 
         // MODAL TOGGLES
         function openModal() { document.getElementById('subModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('subModal').style.display = 'none'; }
-
-        // SEARCH PLACEHOLDER ACTION
-        document.getElementById('archiveSearch').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') alert('Local Database Filter: Use browser search (Ctrl+F) for rapid sorting.');
-        });
     </script>
-
 </body>
 </html>
