@@ -58,7 +58,15 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; }
         .modal-card { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 15px; text-align: center; width: 340px; }
         .modal-btn { display: block; padding: 15px; margin: 12px 0; text-decoration: none; color: #000; background: var(--accent); border-radius: 8px; font-weight: bold; }
-        .close-modal-btn { background:transparent; border:none; color:#555; cursor:pointer; margin-top:15px; font-family:monospace; text-transform:uppercase; font-size: 11px; }
+        
+        /* FAINT WHITE GLOW RETURN BUTTON */
+        .close-modal-btn { 
+            background:transparent; border:none; color:#777; cursor:pointer; 
+            margin-top:15px; font-family:monospace; text-transform:uppercase; 
+            font-size: 11px; opacity: 0.6; transition: 0.3s;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2); 
+        }
+        .close-modal-btn:hover { opacity: 1; color: #fff; text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); }
 
         /* MAINTENANCE STAMP */
         .maintenance-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; background: #000; }
@@ -126,9 +134,7 @@
 
     <script>
         window.addEventListener('load', () => { setTimeout(() => { document.getElementById('boot-screen').remove(); }, 1500); });
-        
         function toggleMenu() { document.getElementById('mobileSidebar').classList.toggle('open'); }
-        
         function openWindow(windowId, el) {
             document.querySelectorAll('.window').forEach(win => win.classList.remove('active'));
             document.getElementById(windowId).classList.add('active');
@@ -136,8 +142,6 @@
             el.classList.add('active');
             if (window.innerWidth <= 850) toggleMenu();
         }
-
-        /* MODAL SCRIPTS */
         function openModal() { document.getElementById('subModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('subModal').style.display = 'none'; }
     </script>
