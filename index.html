@@ -18,30 +18,57 @@
 
         /* HEADER & SEARCH */
         nav { height: var(--header-h); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; background: #000; z-index: 100; }
-        .logo-area { font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
-        .search-container { flex-grow: 1; display: flex; justify-content: center; padding: 0 40px; }
-        .search-bar { width: 100%; max-width: 550px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 18px; color: var(--accent); outline: none; box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); }
+        .logo-area { font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; flex-shrink: 0; }
+        .search-container { flex-grow: 1; display: flex; justify-content: center; padding: 0 20px; }
+        .search-bar { width: 100%; max-width: 500px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 18px; color: var(--accent); outline: none; }
+        .menu-icon { font-size: 24px; color: var(--accent); cursor: pointer; display: none; margin-left: 15px; }
 
         /* NEON STATUS */
-        .user-status { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: bold; color: var(--accent); }
+        .user-status { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: bold; color: var(--accent); flex-shrink: 0; }
         .blink-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 15px var(--accent); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         /* MAIN LAYOUT */
-        .main-wrapper { display: flex; flex-grow: 1; height: calc(100vh - var(--header-h)); }
-        aside { width: 260px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 25px 0; }
+        .main-wrapper { display: flex; flex-grow: 1; height: calc(100vh - var(--header-h)); position: relative; }
+        aside { 
+            width: 260px; background: var(--sidebar); border-right: 1px solid var(--border); 
+            display: flex; flex-direction: column; padding: 25px 0; transition: transform 0.3s ease; z-index: 200;
+        }
         .nav-link { padding: 14px 30px; font-size: 13px; color: #999; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
         .nav-link.active { background: #151515; color: #fff; border-left: 4px solid var(--accent); }
 
         /* VIEWPORT & SHIELD */
-        .viewport { flex-grow: 1; position: relative; overflow: hidden; }
+        .viewport { flex-grow: 1; position: relative; overflow: hidden; background: #000; }
+        .window { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
+        .window.active { display: flex; justify-content: center; align-items: center; }
         .shield { position: absolute; top: 0; left: 0; width: 100%; height: 45px; background: #000; z-index: 10; }
         iframe { width: 145%; height: 100%; border: none; position: absolute; left: 0; top: 0; margin-right: -45%; filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1); }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; }
-        .modal-card { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 15px; text-align: center; width: 340px; }
-        .modal-btn { display: block; padding: 15px; margin: 12px 0; text-decoration: none; color: #000; background: var(--accent); border-radius: 8px; font-weight: bold; }
+        /* MAINTENANCE STAMP */
+        .maintenance-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; }
+        .stamp-text {
+            color: var(--accent);
+            font-family: 'Courier New', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            border: 5px solid var(--accent);
+            padding: 20px 40px;
+            transform: rotate(-12deg); /* Tilted Stamp effect */
+            opacity: 0.8;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @media (max-width: 850px) {
+            .menu-icon { display: block; }
+            .user-status span { display: none; }
+            aside { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: 280px; transform: translateX(100%); border-left: 1px solid var(--border); }
+            aside.open { transform: translateX(0); }
+            iframe { width: 170%; margin-right: -70%; }
+            .stamp-text { font-size: 1.5rem; padding: 15px 30px; }
+        }
     </style>
 </head>
 <body>
@@ -51,50 +78,46 @@
         <div class="boot-loader"></div>
     </div>
 
-    <div id="subModal" class="modal" onclick="closeModal()">
-        <div class="modal-card" onclick="event.stopPropagation()">
-            <h2 style="color:#fff; font-size:18px;">SUBMIT EVIDENCE</h2>
-            <a href="mailto:failedartistgerman@gmail.com" class="modal-btn">ENCRYPTED EMAIL</a>
-            <a href="https://www.instagram.com/dpskeconfessions_/" target="_blank" class="modal-btn">INSTAGRAM DIRECT</a>
-            <button onclick="closeModal()" style="background:none; border:none; color:#555; cursor:pointer; margin-top:15px;">[ RETURN ]</button>
-        </div>
-    </div>
-
     <nav>
         <div class="logo-area">DPS EPSTEIN FILES</div>
-        <div class="search-container"><input type="text" class="search-bar" placeholder="Search decrypted records..."></div>
+        <div class="search-container"><input type="text" class="search-bar" placeholder="Search records..."></div>
         <div class="user-status"><div class="blink-dot"></div><span>STUDENT_ACCESS: ACTIVE</span></div>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
     </nav>
 
     <div class="main-wrapper">
-        <aside id="sidebar-links">
-            <button onclick="openModal()" style="background:#fff; color:#000; padding:14px; margin:0 25px 30px; border-radius:30px; border:none; font-weight:800; cursor:pointer;">+ Submit Case</button>
-            
-            <div class="nav-link active" onclick="switchDynamicView('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📥 Latest Leaks</div>
-            <div class="nav-link" onclick="switchDynamicView('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📁 Cyber Harassment</div>
-            <div class="nav-link" onclick="switchDynamicView('1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO', this)">📁 Inbox</div>
+        <aside id="mobileSidebar">
+            <button style="background:#fff; color:#000; padding:14px; margin:0 25px 30px; border-radius:30px; border:none; font-weight:800;">+ Submit Case</button>
+            <div class="nav-link active" onclick="openWindow('leaks-window', this)">📥 Latest Leaks</div>
+            <div class="nav-link" onclick="openWindow('inbox-window', this)">📁 Inbox</div>
         </aside>
 
         <main class="viewport">
-            <div class="shield"></div> <iframe id="masterFrame" src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
+            <div id="leaks-window" class="window active">
+                <div class="shield"></div>
+                <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
+            </div>
+
+            <div id="inbox-window" class="window">
+                <div class="maintenance-container">
+                    <div class="stamp-text">Files are hidden<br>for maintenance</div>
+                </div>
+            </div>
         </main>
     </div>
 
     <script>
         window.addEventListener('load', () => { setTimeout(() => { document.getElementById('boot-screen').remove(); }, 1500); });
 
-        // THE DYNAMIC ENGINE
-        function switchDynamicView(folderId, el) {
-            // Points the iframe directly to the PDF list of that folder
-            document.getElementById('masterFrame').src = `https://drive.google.com/embeddedfolderview?id=${folderId}#list`;
-            
-            // UI Switch
+        function toggleMenu() { document.getElementById('mobileSidebar').classList.toggle('open'); }
+
+        function openWindow(windowId, el) {
+            document.querySelectorAll('.window').forEach(win => win.classList.remove('active'));
+            document.getElementById(windowId).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             el.classList.add('active');
+            if (window.innerWidth <= 850) toggleMenu();
         }
-
-        function openModal() { document.getElementById('subModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('subModal').style.display = 'none'; }
     </script>
 </body>
 </html>
