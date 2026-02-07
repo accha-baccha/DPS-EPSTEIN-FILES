@@ -75,7 +75,7 @@
         }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* MAIN BODY */
+        /* MAIN BODY LAYOUT */
         .main-wrapper { display: flex; flex-grow: 1; height: calc(100vh - var(--header-h)); width: 100%; }
 
         /* SIDEBAR / MOBILE NAV */
@@ -100,15 +100,39 @@
         .nav-link:hover { background: #151515; color: #fff; }
         .nav-link.active { background: #151515; color: #fff; border-left: 4px solid var(--accent); }
 
-        /* IFRAME VIEWPORT */
-        .viewport { flex-grow: 1; height: 100%; background: #000; }
-        iframe {
-            width: 100%; height: 100%; border: none;
-            /* J-Mail Professional Filter */
-            filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1);
+        /* --- REDESIGNED ANONYMITY VIEWPORT --- */
+        .viewport { 
+            flex-grow: 1; 
+            height: 100%; 
+            background: #000; 
+            overflow: hidden; /* Acts as the 'scissors' to cut the name column */
+            position: relative; 
         }
 
-        /* MOBILE OPTIMIZATION */
+        iframe {
+            /* We extend the width so the 'Owner' and 'Last Modified' columns 
+               are pushed off the right edge of the screen */
+            width: 140%; 
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* Pulls the view back to keep file names on the left */
+            margin-right: -40%; 
+            
+            /* J-Mail Professional Filter */
+            filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1);
+            
+            /* Ensures smooth scrolling on mobile */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* --- UI POLISH (OPTIONAL REFINEMENT) --- */
+        .search-bar::placeholder { color: #333; }
+        .nav-link:active { transform: scale(0.98); } 
+
+        /* MOBILE OPTIMIZATION OVERRIDES */
         @media (max-width: 850px) {
             .main-wrapper { flex-direction: column; }
             aside {
@@ -121,6 +145,7 @@
             .nav-link.active { border-bottom: 3px solid var(--accent); }
             .logo-area { display: none; }
             .search-container { padding: 0 10px; }
+            iframe { width: 170%; margin-right: -70%; } /* Aggressive clip for mobile screens */
         }
 
         /* SUBMISSION MODAL */
@@ -139,22 +164,6 @@
             text-decoration: none; color: #000; background: var(--accent);
             border-radius: 8px; font-weight: bold; font-size: 14px;
         }
-        /* Update your existing .viewport and iframe sections with this */
-.viewport { 
-    flex-grow: 1; 
-    height: 100%; 
-    background: #000; 
-    overflow: hidden; /* This acts as the 'scissors' to cut the name out */
-    position: relative; 
-}
-
-iframe {
-    width: 130%; /* Make the iframe wider than the screen */
-    height: 100%;
-    border: none;
-    margin-right: -30%; /* Pull the name column off the edge of the screen */
-    filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1);
-}
     </style>
 </head>
 <body>
@@ -198,7 +207,7 @@ iframe {
     </div>
 
     <script>
-        // HANDLE BOOT SCREEN
+        // BOOT SCREEN LOGIC
         window.addEventListener('load', () => {
             const boot = document.getElementById('boot-screen');
             setTimeout(() => {
@@ -208,21 +217,22 @@ iframe {
             }, 1500);
         });
 
+        // VIEW SWITCHER
         function switchView(id, el) {
             document.getElementById('contentFrame').src = `https://drive.google.com/embeddedfolderview?id=${id}#list`;
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             el.classList.add('active');
         }
 
+        // MODAL TOGGLES
         function openModal() { document.getElementById('subModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('subModal').style.display = 'none'; }
 
-        // SEARCH TRIGGER
+        // SEARCH PLACEHOLDER ACTION
         document.getElementById('archiveSearch').addEventListener('keypress', (e) => {
             if(e.key === 'Enter') alert('Local Database Filter: Use browser search (Ctrl+F) for rapid sorting.');
         });
     </script>
 
 </body>
-
 </html>
