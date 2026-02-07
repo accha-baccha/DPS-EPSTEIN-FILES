@@ -37,16 +37,33 @@
         .boot-loader::after { content: ''; position: absolute; left: -100%; width: 100%; height: 100%; background: var(--accent); animation: loading 1.2s infinite; }
         @keyframes loading { 100% { left: 100%; } }
 
-        /* NAV & SEARCH */
+        /* NAV & OUTSTANDING SEARCH BAR */
         nav { height: var(--header-h); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; background: #000; z-index: 100; }
         .logo-area { font-weight: 800; font-size: 14px; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
+        
         .search-container { flex-grow: 1; display: flex; justify-content: center; padding: 0 40px; }
         .search-bar {
             width: 100%; max-width: 550px; background: #111;
-            border: 1px solid var(--border); border-radius: 8px;
+            border: 1px solid #333; /* Restored Border */
+            border-radius: 8px;
             padding: 10px 18px; color: var(--accent); font-size: 13px; outline: none;
+            transition: 0.3s;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.05); /* Subtle Standout Glow */
         }
-        .search-bar:focus { border-color: var(--accent); background: #161616; }
+        .search-bar:focus { 
+            border-color: var(--accent); 
+            background: #161616; 
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); /* Intense Glow on Focus */
+        }
+
+        /* BLINKING STATUS RESTORED */
+        .user-status { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: bold; color: var(--accent); text-transform: uppercase; }
+        .blink-dot {
+            width: 8px; height: 8px; background: var(--accent);
+            border-radius: 50%; box-shadow: 0 0 8px var(--accent);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         /* MAIN WRAPPER */
         .main-wrapper { display: flex; flex-grow: 1; height: calc(100vh - var(--header-h)); }
@@ -71,8 +88,7 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; }
         .modal-card { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 15px; text-align: center; width: 340px; }
         .modal-btn { display: block; padding: 15px; margin: 12px 0; text-decoration: none; color: #000; background: var(--accent); border-radius: 8px; font-weight: bold; }
-        .close-modal-btn { background:transparent; border:none; color:#555; cursor:pointer; margin-top:15px; font-family:monospace; text-transform:uppercase; font-size: 11px; letter-spacing: 1px; }
-        .close-modal-btn:hover { color: #888; }
+        .close-modal-btn { background:transparent; border:none; color:#555; cursor:pointer; margin-top:15px; font-family:monospace; text-transform:uppercase; font-size: 11px; }
     </style>
 </head>
 <body>
@@ -94,9 +110,12 @@
     <nav>
         <div class="logo-area">DPS EPSTEIN FILES</div>
         <div class="search-container">
-            <input type="text" class="search-bar" id="archiveSearch" placeholder="Type name or case # to filter...">
+            <input type="text" class="search-bar" id="archiveSearch" placeholder="Search decrypted records...">
         </div>
-        <div style="color:var(--accent); font-size:10px; font-weight:bold; margin-left: 10px;">STUDENT_ACCESS: ACTIVE</div>
+        <div class="user-status">
+            <div class="blink-dot"></div>
+            <span>STUDENT_ACCESS: ACTIVE</span>
+        </div>
     </nav>
 
     <div class="main-wrapper">
