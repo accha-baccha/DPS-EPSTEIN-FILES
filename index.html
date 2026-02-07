@@ -105,7 +105,7 @@
             flex-grow: 1; 
             height: 100%; 
             background: #000; 
-            overflow: hidden; /* Clips the name column off-screen */
+            overflow: hidden; /* Clips the name column */
             position: relative; 
         }
 
@@ -121,10 +121,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* --- UI POLISH --- */
-        .search-bar::placeholder { color: #333; }
-        .nav-link:active { transform: scale(0.98); } 
-
+        /* MOBILE OVERRIDES */
         @media (max-width: 850px) {
             .main-wrapper { flex-direction: column; }
             aside {
@@ -140,7 +137,7 @@
             iframe { width: 170%; margin-right: -70%; }
         }
 
-        /* SUBMISSION MODAL */
+        /* MODAL */
         .modal {
             display: none; position: fixed; inset: 0;
             background: rgba(0,0,0,0.9); z-index: 10000;
@@ -199,7 +196,7 @@
     </div>
 
     <script>
-        // BOOT SCREEN LOGIC
+        // BOOT SCREEN
         window.addEventListener('load', () => {
             const boot = document.getElementById('boot-screen');
             setTimeout(() => {
@@ -209,15 +206,13 @@
             }, 1500);
         });
 
-        // SMART SEARCH LOGIC
+        // SEARCH DATABASE
         const searchDB = {
             "9th": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
-            "latest": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
             "pratham": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
-            "cyber": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
-            "harassment": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
             "main": "1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO",
-            "directory": "1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO"
+            "latest": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y",
+            "cyber": "1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y"
         };
 
         const searchBar = document.getElementById('archiveSearch');
@@ -229,10 +224,10 @@
                     searchBar.value = "ACCESS GRANTED: " + query.toUpperCase();
                     setTimeout(() => { searchBar.value = ""; }, 2000);
                 } else {
-                    searchBar.style.borderColor = "red";
+                    searchBar.style.color = "red";
                     searchBar.value = "ERROR: FILE NOT FOUND";
                     setTimeout(() => { 
-                        searchBar.style.borderColor = "var(--border)"; 
+                        searchBar.style.color = "var(--accent)"; 
                         searchBar.value = "";
                     }, 1500);
                 }
@@ -246,7 +241,6 @@
             if(el) el.classList.add('active');
         }
 
-        // MODAL TOGGLES
         function openModal() { document.getElementById('subModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('subModal').style.display = 'none'; }
     </script>
