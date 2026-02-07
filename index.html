@@ -26,7 +26,7 @@
             overflow: hidden; display: flex; flex-direction: column;
         }
 
-        /* BOOT SCREEN */
+        /* TERMINAL BOOT SEQUENCE */
         #boot-screen {
             position: fixed; inset: 0; background: #000;
             z-index: 9999; display: flex; flex-direction: column;
@@ -58,7 +58,7 @@
         /* THE DYNAMIC VIEWPORT */
         .viewport { flex-grow: 1; position: relative; background: #000; overflow: hidden; }
         iframe {
-            width: 145%; /* Increased clip to ensure name is hidden */
+            width: 145%; /* Keeps your name hidden */
             height: 100%;
             border: none;
             position: absolute;
@@ -76,7 +76,7 @@
 <body>
 
     <div id="boot-screen">
-        <div style="letter-spacing: 3px;">INITIALIZING DYNAMIC SEARCH...</div>
+        <div style="letter-spacing: 3px;">RESTRUCTURING ARCHIVE...</div>
         <div class="boot-loader"></div>
     </div>
 
@@ -93,14 +93,14 @@
         <div class="search-container">
             <input type="text" class="search-bar" id="archiveSearch" placeholder="Type name or case # to filter...">
         </div>
-        <div style="color:var(--accent); font-size:10px; font-weight:bold;">STUDENT_ACCESS: ACTIVE</div>
+        <div style="color:var(--accent); font-size:10px; font-weight:bold; margin-left: 10px;">STUDENT_ACCESS: ACTIVE</div>
     </nav>
 
     <div class="main-wrapper">
         <aside>
             <button class="compose-btn" onclick="openModal()">+ Submit Case</button>
-            <div class="nav-link active" onclick="switchView('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📥 Latest Leaks</div>
-            <div class="nav-link" onclick="switchView('1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO', this)">📁 Main Directory</div>
+            <div class="nav-link active" onclick="switchView('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📥 Inbox</div>
+            <div class="nav-link" onclick="switchView('1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO', this)">📁 Archive Directory</div>
         </aside>
         <main class="viewport">
             <iframe id="contentFrame" src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
@@ -108,29 +108,12 @@
     </div>
 
     <script>
-        // BOOT LOGIC
         window.addEventListener('load', () => {
             setTimeout(() => { document.getElementById('boot-screen').remove(); }, 1500);
         });
 
-        // DYNAMIC FILTER LOGIC
-        const searchBar = document.getElementById('archiveSearch');
-        const frame = document.getElementById('contentFrame');
-
-        searchBar.addEventListener('input', () => {
-            const val = searchBar.value.toLowerCase();
-            
-            // This script 'pokes' the iframe to filter based on visible text
-            // Note: Limited by Cross-Origin, so we use a "Visual Focus" hack
-            if(val.length > 2) {
-                console.log("Filtering for: " + val);
-                // For a truly dynamic experience, we tell the user how to use browser-native search
-                searchBar.style.borderColor = "var(--accent)";
-            }
-        });
-
         function switchView(id, el) {
-            frame.src = `https://drive.google.com/embeddedfolderview?id=${id}#list`;
+            document.getElementById('contentFrame').src = `https://drive.google.com/embeddedfolderview?id=${id}#list`;
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             el.classList.add('active');
         }
