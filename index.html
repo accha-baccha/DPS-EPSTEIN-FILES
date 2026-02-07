@@ -20,13 +20,19 @@
         nav { height: var(--header-h); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; background: #000; z-index: 100; }
         .logo-area { font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; flex-shrink: 0; }
         .search-container { flex-grow: 1; display: flex; justify-content: center; padding: 0 20px; }
-        .search-bar { width: 100%; max-width: 500px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 18px; color: var(--accent); outline: none; }
+        .search-bar { width: 100%; max-width: 500px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 18px; color: var(--accent); outline: none; box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); }
         .menu-icon { font-size: 24px; color: var(--accent); cursor: pointer; display: none; margin-left: 15px; }
 
-        /* NEON STATUS */
+        /* INTENSE NEON GLOW DOT */
         .user-status { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: bold; color: var(--accent); flex-shrink: 0; }
-        .blink-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 15px var(--accent); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .blink-dot { 
+            width: 8px; height: 8px; background: var(--accent); border-radius: 50%; 
+            /* Multi-layer shadow for high-intensity glow */
+            box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 15px var(--accent);
+            filter: drop-shadow(0 0 2px var(--accent));
+            animation: pulse 1.5s infinite; 
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--accent), 0 0 15px var(--accent); } 50% { opacity: 0.4; box-shadow: 0 0 2px var(--accent), 0 0 5px var(--accent); } }
 
         /* MAIN LAYOUT */
         .main-wrapper { display: flex; flex-grow: 1; height: calc(100vh - var(--header-h)); position: relative; }
@@ -37,28 +43,21 @@
         .nav-link { padding: 14px 30px; font-size: 13px; color: #999; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
         .nav-link.active { background: #151515; color: #fff; border-left: 4px solid var(--accent); }
 
-        /* VIEWPORT & SHIELD */
+        /* VIEWPORT & DUAL WINDOWS */
         .viewport { flex-grow: 1; position: relative; overflow: hidden; background: #000; }
         .window { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
-        .window.active { display: flex; justify-content: center; align-items: center; }
+        .window.active { display: flex; }
+        
         .shield { position: absolute; top: 0; left: 0; width: 100%; height: 45px; background: #000; z-index: 10; }
         iframe { width: 145%; height: 100%; border: none; position: absolute; left: 0; top: 0; margin-right: -45%; filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1); }
 
         /* MAINTENANCE STAMP */
-        .maintenance-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; }
+        .maintenance-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; background: #000; }
         .stamp-text {
-            color: var(--accent);
-            font-family: 'Courier New', monospace;
-            font-size: 2.5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            border: 5px solid var(--accent);
-            padding: 20px 40px;
-            transform: rotate(-12deg); /* Tilted Stamp effect */
-            opacity: 0.8;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
-            user-select: none;
-            pointer-events: none;
+            color: var(--accent); font-family: 'Courier New', monospace; font-size: 2.2rem; font-weight: 900;
+            text-transform: uppercase; border: 5px solid var(--accent); padding: 15px 30px;
+            transform: rotate(-12deg); opacity: 0.8; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+            user-select: none; pointer-events: none;
         }
 
         @media (max-width: 850px) {
@@ -67,7 +66,6 @@
             aside { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: 280px; transform: translateX(100%); border-left: 1px solid var(--border); }
             aside.open { transform: translateX(0); }
             iframe { width: 170%; margin-right: -70%; }
-            .stamp-text { font-size: 1.5rem; padding: 15px 30px; }
         }
     </style>
 </head>
@@ -80,20 +78,26 @@
 
     <nav>
         <div class="logo-area">DPS EPSTEIN FILES</div>
-        <div class="search-container"><input type="text" class="search-bar" placeholder="Search records..."></div>
+        <div class="search-container"><input type="text" class="search-bar" placeholder="Search decrypted records..."></div>
         <div class="user-status"><div class="blink-dot"></div><span>STUDENT_ACCESS: ACTIVE</span></div>
         <div class="menu-icon" onclick="toggleMenu()">☰</div>
     </nav>
 
     <div class="main-wrapper">
         <aside id="mobileSidebar">
-            <button style="background:#fff; color:#000; padding:14px; margin:0 25px 30px; border-radius:30px; border:none; font-weight:800;">+ Submit Case</button>
+            <button style="background:#fff; color:#000; padding:14px; margin:0 25px 30px; border-radius:30px; border:none; font-weight:800; cursor:pointer;">+ Submit Case</button>
             <div class="nav-link active" onclick="openWindow('leaks-window', this)">📥 Latest Leaks</div>
+            <div class="nav-link" onclick="openWindow('harrasment-window', this)">📁 Cyber Harassment</div>
             <div class="nav-link" onclick="openWindow('inbox-window', this)">📁 Inbox</div>
         </aside>
 
         <main class="viewport">
             <div id="leaks-window" class="window active">
+                <div class="shield"></div>
+                <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
+            </div>
+
+            <div id="harrasment-window" class="window">
                 <div class="shield"></div>
                 <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
             </div>
