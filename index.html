@@ -9,7 +9,7 @@
     <style>
         :root { --bg: #000; --sidebar: #0d0d0d; --border: #222; --accent: #00ff41; --text-main: #eee; --header-h: 60px; }
         
-        /* APP LOCK: Prevents browser-like behavior */
+        /* APP BEHAVIOR LOCK */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
         body, html { margin: 0; padding: 0; height: 100vh; width: 100vw; background: var(--bg); color: var(--text-main); font-family: sans-serif; overflow: hidden; display: flex; flex-direction: column; }
 
@@ -19,24 +19,23 @@
         .boot-loader::after { content: ''; position: absolute; left: -100%; width: 100%; height: 100%; background: var(--accent); animation: loading 1.2s infinite; }
         @keyframes loading { 100% { left: 100%; } }
 
-        /* HEADER & SEARCHBAR */
+        /* HEADER */
         nav { height: var(--header-h); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; background: #000; z-index: 100; }
         .logo-area { font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; flex-shrink: 0; }
         .search-container { flex-grow: 1; display: flex; justify-content: center; padding: 0 20px; }
-        .search-bar { width: 100%; max-width: 500px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 18px; color: var(--accent); outline: none; box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); }
+        .search-bar { width: 100%; max-width: 500px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 18px; color: var(--accent); outline: none; }
         .menu-icon { font-size: 24px; color: var(--accent); cursor: pointer; display: none; margin-left: 15px; }
 
-        /* NEON AUTHENTICATION DOT */
+        /* NEON STATUS */
         .user-status { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: bold; color: var(--accent); flex-shrink: 0; }
         .blink-dot { 
             width: 8px; height: 8px; background: var(--accent); border-radius: 50%; 
             box-shadow: 0 0 5px var(--accent), 0 0 12px var(--accent), 0 0 20px var(--accent);
-            filter: drop-shadow(0 0 2px var(--accent));
-            animation: pulse 1.5s infinite; 
+            filter: drop-shadow(0 0 2px var(--accent)); animation: pulse 1.5s infinite; 
         }
         @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent), 0 0 20px var(--accent); } 50% { opacity: 0.4; box-shadow: 0 0 3px var(--accent), 0 0 10px var(--accent); } }
 
-        /* MAIN WRAPPER */
+        /* MAIN SHELL */
         .main-wrapper { display: flex; flex-grow: 1; height: calc(100vh - var(--header-h)); position: relative; }
         aside { 
             width: 260px; background: var(--sidebar); border-right: 1px solid var(--border); 
@@ -45,8 +44,9 @@
         .nav-link { padding: 14px 30px; font-size: 13px; color: #999; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
         .nav-link:hover { color: #fff; background: #111; }
         .nav-link.active { background: #151515; color: #fff; border-left: 4px solid var(--accent); }
+        .sub-label { font-size: 10px; color: #444; padding: 10px 30px 5px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
 
-        /* VIEWPORT (CLEAN FULL VIEW) */
+        /* VIEWPORT */
         .viewport { flex-grow: 1; position: relative; overflow: hidden; background: #000; }
         iframe { width: 100%; height: 100%; border: none; position: absolute; left: 0; top: 0; filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1); }
 
@@ -54,11 +54,6 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; }
         .modal-card { background: #0a0a0a; border: 1px solid var(--border); padding: 40px; border-radius: 15px; text-align: center; width: 340px; }
         .modal-btn { display: block; padding: 15px; margin: 12px 0; text-decoration: none; color: #000; background: var(--accent); border-radius: 8px; font-weight: bold; }
-        .close-modal-btn { background:transparent; border:none; color:#777; cursor:pointer; margin-top:15px; font-family:monospace; text-transform:uppercase; font-size: 11px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
-
-        /* MAINTENANCE STAMP */
-        #inbox-maintenance { display: none; position: absolute; inset: 0; background: #000; z-index: 50; flex-direction: column; align-items: center; justify-content: center; }
-        .stamp-text { color: var(--accent); font-family: 'Courier New', monospace; font-size: 2.2rem; font-weight: 900; text-transform: uppercase; border: 5px solid var(--accent); padding: 15px 30px; transform: rotate(-12deg); opacity: 0.8; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
 
         @media (max-width: 850px) {
             .menu-icon { display: block; }
@@ -80,13 +75,13 @@
             <h2 style="color:#fff; font-size:18px; margin-bottom:20px;">SUBMIT EVIDENCE</h2>
             <a href="mailto:failedartistgerman@gmail.com?subject=EVIDENCE_SUBMISSION" class="modal-btn">ENCRYPTED EMAIL</a>
             <a href="https://www.instagram.com/dpskeconfessions_/" target="_blank" class="modal-btn">INSTAGRAM DIRECT</a>
-            <button onclick="closeModal()" class="close-modal-btn">[ RETURN ]</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#777; cursor:pointer; margin-top:15px; font-family:monospace; text-transform:uppercase; font-size: 11px;">[ RETURN ]</button>
         </div>
     </div>
 
     <nav>
         <div class="logo-area">DPS EPSTEIN FILES</div>
-        <div class="search-container"><input type="text" class="search-bar" id="archiveSearch" placeholder="Search decrypted records..."></div>
+        <div class="search-container"><input type="text" class="search-bar" placeholder="Search decrypted records..."></div>
         <div class="user-status"><div class="blink-dot"></div><span>STUDENT_ACCESS: ACTIVE</span></div>
         <div class="menu-icon" onclick="toggleMenu()">☰</div>
     </nav>
@@ -94,17 +89,19 @@
     <div class="main-wrapper">
         <aside id="mobileSidebar">
             <button onclick="openModal()" style="background:#fff; color:#000; padding:14px; margin:0 25px 30px; border-radius:30px; border:none; font-weight:800; cursor:pointer;">+ Submit Evidences</button>
-            <div class="nav-link active" onclick="loadFolder('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this, false)">📥 Latest Leaks</div>
-            <div class="nav-link" onclick="loadFolder('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this, false)">📁 Cyber Harassment</div>
-            <div class="nav-link" onclick="loadFolder('1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO', this, true)">📁 Inbox</div>
-        </aside>
+            
+            <div class="nav-link active" onclick="loadContent('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📥 Latest Leaks</div>
+            
+            <div class="sub-label">Case Directories</div>
+            <div class="nav-link" onclick="loadContent('1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y', this)">📁 Cyber Harassment</div>
+            <div class="nav-link" onclick="loadContent('1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO', this)">📁 Inbox Archives</div>
+            </aside>
 
         <main class="viewport">
-            <div id="inbox-maintenance">
-                <div class="stamp-text">Files are hidden<br>for maintenance</div>
-            </div>
-            
-            <iframe id="masterFrame" src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
+            <iframe id="appFrame" 
+                    sandbox="allow-forms allow-scripts allow-same-origin" 
+                    src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list">
+            </iframe>
         </main>
     </div>
 
@@ -114,28 +111,15 @@
         function toggleMenu() { document.getElementById('mobileSidebar').classList.toggle('open'); }
 
         /**
-         * Dynamic Folder Loader
-         * id: The Google Drive Folder ID
-         * el: The clicked sidebar element
-         * isMaintenance: Boolean to trigger the maintenance stamp
+         * Unified Loader: Swaps folder contents instantly
          */
-        function loadFolder(id, el, isMaintenance) {
-            const frame = document.getElementById('masterFrame');
-            const maintenance = document.getElementById('inbox-maintenance');
+        function loadContent(folderId, el) {
+            const frame = document.getElementById('appFrame');
+            // This pulls the folder's file list directly into the UI
+            frame.src = `https://drive.google.com/embeddedfolderview?id=${folderId}#list`;
 
-            if (isMaintenance) {
-                frame.style.display = 'none';
-                maintenance.style.display = 'flex';
-            } else {
-                maintenance.style.display = 'none';
-                frame.style.display = 'block';
-                frame.src = `https://drive.google.com/embeddedfolderview?id=${id}#list`;
-            }
-
-            // Update UI Active State
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             el.classList.add('active');
-            
             if (window.innerWidth <= 850) toggleMenu();
         }
 
