@@ -43,25 +43,11 @@
         .nav-link:hover { color: #fff; background: #111; }
         .nav-link.active { background: #151515; color: #fff; border-left: 4px solid var(--accent); }
 
-        <main class="viewport">
-            <div id="leaks-window" class="window active">
-                <div class="iframe-cropper">
-                    <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list/sort=descname"></iframe>
-                </div>
-            </div>
-
-            <div id="harrasment-window" class="window">
-                <div class="iframe-cropper">
-                    <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list/sort=descname"></iframe>
-                </div>
-            </div>
-
-            <div id="inbox-window" class="window">
-                <div class="maintenance-container">
-                    <div class="stamp-text">Files are hidden<br>for maintenance</div>
-                </div>
-            </div>
-        </main>
+        /* VIEWPORT */
+        .viewport { flex-grow: 1; position: relative; overflow: hidden; background: #000; }
+        .window { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
+        .window.active { display: block; }
+        iframe { width: 100%; height: 100%; border: none; position: absolute; left: 0; top: 0; filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1); }
 
         /* MODALS */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; align-items: center; justify-content: center; }
@@ -69,11 +55,9 @@
         .modal-btn { display: block; padding: 15px; margin: 12px 0; text-decoration: none; color: #000; background: var(--accent); border-radius: 8px; font-weight: bold; font-family: sans-serif; }
         .close-modal-btn { background:transparent; border:none; color:#777; cursor:pointer; margin-top:15px; font-family:monospace; text-transform:uppercase; font-size: 11px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
         
-        /* ABOUT TEXT STYLING */
         .about-section { font-family: 'Courier New', monospace; text-align: left; color: #eee; font-size: 13px; line-height: 1.5; margin-bottom: 20px; border: 1px solid #222; padding: 15px; background: #050505; }
         .insta-link { color: var(--accent); text-decoration: none; font-weight: bold; }
 
-        /* MAINTENANCE STAMP */
         .maintenance-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; background: #000; }
         .stamp-text { color: var(--accent); font-family: 'Courier New', monospace; font-size: 2.2rem; font-weight: 900; text-transform: uppercase; border: 5px solid var(--accent); padding: 15px 30px; transform: rotate(-12deg); opacity: 0.8; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
 
@@ -83,25 +67,6 @@
             aside { position: fixed; top: var(--header-h); right: 0; bottom: 0; width: 280px; transform: translateX(100%); border-left: 1px solid var(--border); }
             aside.open { transform: translateX(0); }
         }
-        /* Container to crop the iframe */
-        .iframe-cropper {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Make iframe wider than container to hide the right-side date column */
-        .iframe-cropper iframe {
-            width: 135%; /* Increased to 135% to ensure the date is fully hidden on all screens */
-            height: 100%;
-            border: none;
-            position: absolute;
-            left: 0;
-            top: 0;
-            filter: invert(0.92) hue-rotate(180deg) brightness(1.05) contrast(1.1);
-        }
-        
     </style>
 </head>
 <body>
@@ -183,7 +148,6 @@
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // PWA Install Logic
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -202,9 +166,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
