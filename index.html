@@ -10,10 +10,11 @@
     
     <script>
         (function() {
-            const ACCESS_KEY = "DPSFILES@069"; // CHANGE YOUR PASSWORD HERE
+            const ACCESS_KEY = "DPS2026"; // Case-sensitive: "dps2026" will fail.
             const userEntry = window.prompt("CRITICAL: System Authentication Required.\n\nEnter Access Key to decrypt records:");
 
-            if (userEntry === null || userEntry.toUpperCase() !== ACCESS_KEY) {
+            // Removed .toUpperCase() to ensure strict case matching
+            if (userEntry === null || userEntry !== ACCESS_KEY) {
                 alert("ACCESS DENIED. Redirecting to secure gateway...");
                 window.location.href = "https://www.google.com";
             }
@@ -128,3 +129,4 @@
     </script>
 </body>
 </html>
+
