@@ -65,7 +65,7 @@
         /* MODALS */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; align-items: center; justify-content: center; }
         .modal-card { background: #0a0a0a; border: 1px solid var(--border); padding: 30px; border-radius: 15px; text-align: center; width: 90%; max-width: 400px; }
-        .modal-btn { display: block; padding: 15px; margin: 12px 0; text-decoration: none; color: #000; background: var(--accent); border-radius: 8px; font-weight: bold; font-family: sans-serif; }
+        .modal-btn { display: block; padding: 15px; margin: 12px 0; text-decoration: none; color: #000; background: var(--accent); border-radius: 8px; font-weight: bold; font-family: sans-serif; cursor: pointer; border: none; width: 100%; }
         .close-modal-btn { background:transparent; border:none; color:#777; cursor:pointer; margin-top:15px; font-family:monospace; text-transform:uppercase; font-size: 11px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
         
         .about-section { font-family: 'Courier New', monospace; text-align: left; color: #eee; font-size: 13px; line-height: 1.5; margin-bottom: 20px; border: 1px solid #222; padding: 15px; background: #050505; }
@@ -110,8 +110,7 @@
             <div id="leaks-window" class="window active">
                 <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list"></iframe>
             </div>
-            
-            <div id="harrasment-window" class="window">
+             <div id="harrasment-window" class="window">
                 <iframe src="https://drive.google.com/embeddedfolderview?id=1CtH-g0p9tpslvfJUSsBy3g4oQX7U4q4y#list?sort=14&direction=d" style="width:100%; height:100%; border:0;"></iframe>
             </div>
 
@@ -120,7 +119,26 @@
                     <div class="stamp-text">Files are hidden<br>for maintenance</div>
                 </div>
             </div>
-            </main>
+        </main>
+    </div>
+
+    <div id="subModal" class="modal">
+        <div class="modal-card">
+            <h3>SUBMIT EVIDENCES</h3>
+            <button class="modal-btn" onclick="closeModal('subModal')">SELECT FILES</button>
+            <button class="close-modal-btn" onclick="closeModal('subModal')">[ CLOSE ]</button>
+        </div>
+    </div>
+
+    <div id="moreModal" class="modal">
+        <div class="modal-card">
+            <h3>MORE INFO</h3>
+            <div class="about-section">
+                ARCHIVE STATUS: ACTIVE<br>
+                CLEARANCE: GRANTED
+            </div>
+            <button class="close-modal-btn" onclick="closeModal('moreModal')">[ CLOSE ]</button>
+        </div>
     </div>
 
     <script>
