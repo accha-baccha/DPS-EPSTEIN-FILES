@@ -122,11 +122,49 @@
         <aside id="mobileSidebar">
             <button class="action-btn" onclick="openModal('subModal')">+ Submit Evidences</button>
             <button class="action-btn more-btn" onclick="openModal('moreModal')">ⓘ MORE</button>
-            
-            <div class="nav-link active" onclick="openWindow('leaks-window', this)">📥 Latest Leaks</div>
-            <div class="nav-link" onclick="openWindow('harrasment-window', this)">📁 Cyber Harassment</div>
-            <div class="nav-link" onclick="openWindow('inbox-window', this)">📁 Inbox</div>
+    
+            <div id="dynamic-folders">
+                 <div class="nav-link active" onclick="openWindow('leaks-window', this)">📥 Latest Leaks</div>
+                <div class="nav-link" onclick="openWindow('inbox-window', this)">📁 Inbox</div>
+            </div>
         </aside>
+
+        <script>
+            const API_KEY = 'AIzaSyB1usSanD4TfyornVk9ruewB132cc_0hkw'; // Replace with your actual API key 
+            const PARENT_FOLDER_ID = '1ZBaCuduCGj9CxcyliSuZcKDXQNmEeDsO';
+
+            async function fetchDriveFolders() {
+                const url = `https://www.googleapis.com/drive/v3/files?q='${PARENT_FOLDER_ID}'+in+parents+and+mimeType='application/vnd.google-apps.folder'&key=${API_KEY}`;
+        
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    const container = document.getElementById('dynamic-folders');
+
+                    if (data.files && data.files.length > 0) {
+                        data.files.forEach(folder => {
+                            if(folder.name.toLowerCase() === 'inbox') return;
+
+                            const folderDiv = document.createElement('div');
+                            folderDiv.className = 'nav-link';
+                            folderDiv.innerHTML = `📁 ${folder.name}`;
+                    
+                            folderDiv.onclick = function() {
+                                const iframe = document.querySelector('#leaks-window iframe');
+                                iframe.src = `https://drive.google.com/embeddedfolderview?id=${folder.id}#list`;
+                                openWindow('leaks-window', folderDiv);
+                            };
+                            container.appendChild(folderDiv);
+                        });
+                    }
+                } catch (error) {
+                    console.error("Critical: Could not sync with database.", error);
+                }
+            }
+
+            // Run this when the page loads
+            window.addEventListener('DOMContentLoaded', fetchDriveFolders);
+        </script>
 
         <main class="viewport">
             <div id="leaks-window" class="window active">
